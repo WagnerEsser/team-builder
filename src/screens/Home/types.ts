@@ -1,4 +1,3 @@
-
 export type Form = {
     players: string;
     qtyTeams: number;
@@ -10,4 +9,8 @@ export const INITIAL_VALUES: Form = {
     qtyTeams: 0,
     qtyPlayersByTeam: 6,
 };
-  
+
+export type Team = {
+    name: string
+    players: string[]
+}

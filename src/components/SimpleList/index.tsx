@@ -8,16 +8,29 @@ import {
   TextField,
 } from "@mui/material";
 import { SportsHandball } from "@mui/icons-material";
+import { Team } from "../../screens/Home/types";
+import { ChangeEvent } from "react";
 
 type Props = {
-  items: string[][];
+  teams: Team[];
   listTitle?: string;
+  setTeams: React.Dispatch<React.SetStateAction<Team[]>>;
 };
 
-const TeamList = ({ items, listTitle }: Props) => {
+const TeamList = ({ teams, listTitle, setTeams }: Props) => {
+  const onChangeNameTeam =
+    (index: number) => (event: ChangeEvent<HTMLTextAreaElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const { value } = event.target;
+      const newTeamList = [...teams];
+      newTeamList[index].name = value;
+      setTeams(newTeamList);
+    };
+
   return (
     <Box display='flex' justifyContent='space-around' marginTop='32px'>
-      {items.map((team, teamNumber) => (
+      {teams.map((team, index) => (
         <List
           dense={true}
           subheader={
@@ -25,12 +38,13 @@ const TeamList = ({ items, listTitle }: Props) => {
               <TextField
                 size='small'
                 variant='standard'
-                value={listTitle || `Time ${teamNumber + 1}`}
+                value={listTitle || team.name}
+                onChange={onChangeNameTeam(index)}
               />
             </ListSubheader>
           }
         >
-          {team.map((player) => (
+          {team.players.map((player) => (
             <ListItem>
               <ListItemIcon>
                 <SportsHandball />

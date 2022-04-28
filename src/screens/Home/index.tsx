@@ -11,12 +11,12 @@ import {
 import { ChangeEvent, useMemo, useState } from "react";
 import { containerBackgroundColor, containerBorderColor } from "../../colors";
 import TeamList from "../../components/SimpleList";
-import { Form, INITIAL_VALUES } from "./types";
+import { Form, INITIAL_VALUES, Team } from "./types";
 import { getListByString, getQtyTeams, shuffleList, treatList } from "./utils";
 
 const Home = () => {
   const [values, setValues] = useState<Form>(INITIAL_VALUES);
-  const [teams, setTeams] = useState<string[][]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const playersList = useMemo(
     () => getListByString(values.players),
     [values.players]
@@ -56,18 +56,27 @@ const Home = () => {
 
   const mountTeams = () => {
     const qtyPlayers = playersList.length;
-    const result: string[][] = [];
+    const result: Team[] = [];
     const randomList = shuffleList(playersList);
+    let counter = 1;
 
     for (let index = 0; index < qtyPlayers; index += values.qtyPlayersByTeam) {
       const time = randomList.splice(0, values.qtyPlayersByTeam);
-      result.push(time);
+      const newTeam: Team = {
+        name: "Time " + counter,
+        players: time,
+      };
+      result.push(newTeam);
+      counter++;
     }
     setTeams(result);
   };
 
   const cleanList = () => {
-    const treatedTeams = teams.map((team) => treatList(team));
+    const treatedTeams: Team[] = teams.map((team) => ({
+      ...team,
+      players: treatList(team.players),
+    }));
     setTeams(treatedTeams);
   };
 
@@ -155,7 +164,7 @@ const Home = () => {
             <Box display='flex' marginTop='32px' alignSelf='baseline'>
               <Box marginRight='8px'>
                 <Button variant='contained' size='large' onClick={mountTeams}>
-                  Sortear
+                  Montar times
                 </Button>
               </Box>
               <Button variant='outlined' size='large' onClick={resetForm}>
@@ -165,8 +174,12 @@ const Home = () => {
           </Box>
         </Box>
 
-        <TeamList items={closedTeams} />
-        <TeamList items={remainingPlayers} listTitle='Sobra' />
+        <TeamList teams={closedTeams} setTeams={setTeams} />
+        <TeamList
+          teams={remainingPlayers}
+          setTeams={setTeams}
+          listTitle='Sobra'
+        />
 
         {closedTeams.length > 0 && (
           <Box marginTop='24px' width='100%' textAlign='center'>
