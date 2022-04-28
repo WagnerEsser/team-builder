@@ -1,14 +1,16 @@
+import { Groups } from "@mui/icons-material";
 import {
   Box,
   Button,
   Container,
+  Divider,
   TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
 import { ChangeEvent, useMemo, useState } from "react";
 import { containerBackgroundColor, containerBorderColor } from "../../colors";
-import SimpleList from "../../components/SimpleList";
+import TeamList from "../../components/SimpleList";
 import { Form, INITIAL_VALUES } from "./types";
 import { getListByString, getQtyTeams, shuffleList, treatList } from "./utils";
 
@@ -65,10 +67,11 @@ const Home = () => {
   };
 
   const cleanList = () => {
-    console.log(`🚀 ~ cleanList`);
     const treatedTeams = teams.map((team) => treatList(team));
     setTeams(treatedTeams);
   };
+
+  const copyList = () => {};
 
   return (
     <Container maxWidth='md'>
@@ -85,11 +88,18 @@ const Home = () => {
           Sorteador de times de vôlei
         </Typography>
 
-        <Box display='flex' justifyContent='center'>
+        <Box display='flex' justifyContent='center' marginBottom='64px'>
           <Box display='flex' flexDirection='column' marginRight='12px'>
-            <Typography component='label' htmlFor='players'>
-              Lista de jogadores:
-            </Typography>
+            <Box display='flex'>
+              <Groups />
+              <Typography
+                component='label'
+                htmlFor='players'
+                sx={{ marginLeft: "8px" }}
+              >
+                Lista de jogadores:
+              </Typography>
+            </Box>
             <TextareaAutosize
               id='players'
               placeholder='Digite ou cole aqui a lista de jogadores...'
@@ -106,45 +116,43 @@ const Home = () => {
               value={values.players}
               onChange={onChangePlayers}
             />
-            <Box marginTop='24px' display='flex' alignItems='center'>
-              <Button
-                variant='contained'
-                color='success'
-                size='small'
-                onClick={cleanList}
-              >
-                Formatar lista
-              </Button>
-            </Box>
           </Box>
-          <Box width={400} marginLeft='12px'>
-            <Box marginTop='24px' display='flex' alignItems='center'>
-              <Typography component='label' htmlFor='qtyPlayersByTeam'>
-                Quantidade de jogadores por time:
-              </Typography>
-              <TextField
-                size='small'
-                sx={{ width: 50, marginLeft: "12px", textAlign: "center" }}
-                style={{ textAlign: "center" }}
-                id='qtyPlayersByTeam'
-                value={values.qtyPlayersByTeam}
-                onChange={onChangeQtyPlayersByTeam}
-              />
-            </Box>
-            <Box marginTop='24px'>
-              <Typography>{playersList.length} jogadores</Typography>
-              <Typography>
-                {values.qtyTeams}{" "}
-                {values.qtyTeams === 1 ? "time fechado" : "times fechados"}
-              </Typography>
-              {!!remainingPlayerLength && (
-                <Typography>
-                  1 time com {remainingPlayerLength} jogadores
+          <Box
+            width={400}
+            display='flex'
+            flexDirection='column'
+            justifyContent='space-between'
+            marginLeft='12px'
+          >
+            <Box>
+              <Box display='flex' alignItems='center'>
+                <Typography component='label' htmlFor='qtyPlayersByTeam'>
+                  Quantidade de jogadores por time:
                 </Typography>
-              )}
+                <TextField
+                  size='small'
+                  sx={{ width: 50, marginLeft: "12px", textAlign: "center" }}
+                  style={{ textAlign: "center" }}
+                  id='qtyPlayersByTeam'
+                  value={values.qtyPlayersByTeam}
+                  onChange={onChangeQtyPlayersByTeam}
+                />
+              </Box>
+              <Box marginTop='24px'>
+                <Typography>{playersList.length} jogadores</Typography>
+                <Typography>
+                  {values.qtyTeams}{" "}
+                  {values.qtyTeams === 1 ? "time fechado" : "times fechados"}
+                </Typography>
+                {!!remainingPlayerLength && (
+                  <Typography>
+                    1 time com {remainingPlayerLength} jogadores
+                  </Typography>
+                )}
+              </Box>
             </Box>
 
-            <Box display='flex' marginTop='32px'>
+            <Box display='flex' marginTop='32px' alignSelf='baseline'>
               <Box marginRight='8px'>
                 <Button variant='contained' size='large' onClick={mountTeams}>
                   Sortear
@@ -157,8 +165,31 @@ const Home = () => {
           </Box>
         </Box>
 
-        <SimpleList items={closedTeams} />
-        <SimpleList items={remainingPlayers} listTitle='Sobra' />
+        <TeamList items={closedTeams} />
+        <TeamList items={remainingPlayers} listTitle='Sobra' />
+
+        {closedTeams.length > 0 && (
+          <Box marginTop='24px' width='100%' textAlign='center'>
+            <Button
+              variant='contained'
+              color='warning'
+              size='large'
+              onClick={cleanList}
+              sx={{ marginRight: "8px", width: 180 }}
+            >
+              Formatar lista
+            </Button>
+            <Button
+              variant='contained'
+              color='success'
+              size='large'
+              onClick={copyList}
+              sx={{ marginLeft: "8px", width: 180 }}
+            >
+              Copiar
+            </Button>
+          </Box>
+        )}
       </Box>
     </Container>
   );
