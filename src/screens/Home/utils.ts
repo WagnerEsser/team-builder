@@ -1,3 +1,5 @@
+import { Team } from "./types";
+
 export const shuffleList = (items: string[]) =>
     items
     .map((value) => ({ value, sort: Math.random() }))
@@ -23,3 +25,25 @@ export const getListByString = (value: string) => {
 export const getQtyTeams = (qtyPlayers: number, qtyPlayersByTeam: number): number => {
     return parseInt((qtyPlayers / qtyPlayersByTeam).toString());
 };
+
+export const getListForCopy = (teams: Team[]) => {
+    const listString: string[] = teams.map(team => {
+        const players: string = team.players.reduce((previousPlayer, currentPlayer) =>
+        `${previousPlayer}
+${currentPlayer}`)
+
+        return `${team.name.toUpperCase()}
+        
+${players}`
+    })
+
+    const stringResult = listString.reduce((previousTeam, currentTeam) => {
+        return `${previousTeam}
+
+💥     💥     💥     💥
+        
+${currentTeam}`
+    })
+
+    return stringResult
+}

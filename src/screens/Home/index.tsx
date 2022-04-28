@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Container,
-  Divider,
   TextareaAutosize,
   TextField,
   Typography,
@@ -12,7 +11,13 @@ import { ChangeEvent, useMemo, useState } from "react";
 import { containerBackgroundColor, containerBorderColor } from "../../colors";
 import TeamList from "../../components/SimpleList";
 import { Form, INITIAL_VALUES, Team } from "./types";
-import { getListByString, getQtyTeams, shuffleList, treatList } from "./utils";
+import {
+  getListByString,
+  getListForCopy,
+  getQtyTeams,
+  shuffleList,
+  treatList,
+} from "./utils";
 
 const Home = () => {
   const [values, setValues] = useState<Form>(INITIAL_VALUES);
@@ -80,7 +85,10 @@ const Home = () => {
     setTeams(treatedTeams);
   };
 
-  const copyList = () => {};
+  const copyList = () => {
+    const listForCopy = getListForCopy(teams);
+    navigator.clipboard.writeText(listForCopy);
+  };
 
   return (
     <Container maxWidth='md'>
