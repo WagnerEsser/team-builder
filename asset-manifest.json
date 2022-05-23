@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/team-builder/static/js/main.1a844c06.js",
+    "main.js": "/team-builder/static/js/main.594b12b3.js",
     "index.html": "/team-builder/index.html",
-    "main.1a844c06.js.map": "/team-builder/static/js/main.1a844c06.js.map"
+    "main.594b12b3.js.map": "/team-builder/static/js/main.594b12b3.js.map"
   },
   "entrypoints": [
-    "static/js/main.1a844c06.js"
+    "static/js/main.594b12b3.js"
   ]
 }
