@@ -26,9 +26,12 @@ export const getQtyTeams = (qtyPlayers: number, qtyPlayersByTeam: number): numbe
     return parseInt((qtyPlayers / qtyPlayersByTeam).toString());
 };
 
-export const getListForCopy = (teams: Team[]) => {
+export const getListForCopy = (teams: Team[], format: boolean = false) => {
     const listString: string[] = teams.map(team => {
-        const players: string = team.players.reduce((previousPlayer, currentPlayer) =>
+        let teamPlayers = team.players
+        if (format) teamPlayers = teamPlayers.map(player => "🤾🏻 " + player)
+
+        const players: string = teamPlayers.reduce((previousPlayer, currentPlayer) =>
         `${previousPlayer}
 ${currentPlayer}`)
 

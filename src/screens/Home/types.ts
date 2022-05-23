@@ -1,11 +1,13 @@
 export type Form = {
-    players: string;
+    malePlayers: string;
+    femalePlayers: string;
     qtyTeams: number;
     qtyPlayersByTeam: number;
 };
   
 export const INITIAL_VALUES: Form = {
-    players: "",
+    malePlayers: "",
+    femalePlayers: "",
     qtyTeams: 0,
     qtyPlayersByTeam: 6,
 };
