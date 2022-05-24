@@ -1,4 +1,4 @@
-import { Groups } from "@mui/icons-material";
+import { Check, Edit, Groups } from "@mui/icons-material";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { ChangeEvent, useMemo, useState } from "react";
 import TeamList from "../../components/SimpleList";
@@ -22,6 +22,7 @@ import {
 const Home = () => {
   const [values, setValues] = useState<Form>(INITIAL_VALUES);
   const [listCleaned, setListCleaned] = useState(false);
+  const [isEdition, setIsEdition] = useState(false);
   const [teams, setTeams] = useState<Team[]>([]);
   const playersList = useMemo(
     () => getListByString(values.malePlayers + "\n" + values.femalePlayers),
@@ -188,8 +189,28 @@ const Home = () => {
     navigator.clipboard.writeText(listForCopy);
   };
 
+  const upPlayer = (teamIndex: number, playerIndex: number) => {
+    const playerToMove = teams[teamIndex].players[playerIndex];
+    const newTeams = [...teams];
+    const destinyTeam = teamIndex === 0 ? values.qtyTeams - 1 : teamIndex - 1;
+    newTeams[destinyTeam].players.push(playerToMove);
+    newTeams[teamIndex].players.splice(playerIndex, 1);
+    setTeams(newTeams);
+  };
+
+  const downPlayer = (teamIndex: number, playerIndex: number) => {
+    const playerToMove = teams[teamIndex].players[playerIndex];
+    const newTeams = [...teams];
+    const destinyTeam = teamIndex === values.qtyTeams - 1 ? 0 : teamIndex + 1;
+    newTeams[destinyTeam].players.push(playerToMove);
+    newTeams[teamIndex].players.splice(playerIndex, 1);
+    setTeams(newTeams);
+  };
+
+  const toggleEdition = () => setIsEdition((value) => !value);
+
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth='lg'>
       <WrapperContainer>
         <Typography variant='h4' marginBottom='48px' align='center'>
           Sorteador de times de vôlei
@@ -304,13 +325,42 @@ const Home = () => {
         </FlexBoxCenter>
 
         <FlexBoxCenter>
-          <TeamList teams={closedTeams} setTeams={setTeams} />
+          <TeamList
+            teams={closedTeams}
+            setTeams={setTeams}
+            isEdition={isEdition}
+            onClickUp={upPlayer}
+            onClickDown={downPlayer}
+          />
           <TeamList
             teams={remainingPlayers}
             setTeams={setTeams}
             listTitle='Sobra'
           />
         </FlexBoxCenter>
+
+        {closedTeams.length > 0 && (
+          <FlexBoxCenter marginTop='16px' marginBottom='48px'>
+            <Button
+              variant='outlined'
+              color={isEdition ? "success" : "info"}
+              size='small'
+              onClick={toggleEdition}
+            >
+              {isEdition ? (
+                <>
+                  <Check />
+                  &nbsp;&nbsp; Concluir
+                </>
+              ) : (
+                <>
+                  <Edit />
+                  &nbsp;&nbsp; Editar posições
+                </>
+              )}
+            </Button>
+          </FlexBoxCenter>
+        )}
 
         {closedTeams.length > 0 && (
           <FlexBoxCenter

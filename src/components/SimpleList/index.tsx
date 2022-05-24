@@ -1,5 +1,6 @@
 import {
   Box,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -7,18 +8,34 @@ import {
   ListSubheader,
   TextField,
 } from "@mui/material";
-import { SportsHandball } from "@mui/icons-material";
+import {
+  ArrowDropDown,
+  ArrowDropUp,
+  SportsHandball,
+} from "@mui/icons-material";
 import { Team } from "../../screens/Home/types";
 import { ChangeEvent } from "react";
 import { FlexBox } from "../../screens/Home/styles";
+import { WrapperArrow } from "./styles";
+import { containerBorderColor } from "../../colors";
 
 type Props = {
   teams: Team[];
   listTitle?: string;
   setTeams: React.Dispatch<React.SetStateAction<Team[]>>;
+  isEdition?: boolean;
+  onClickUp?: (teamIndex: number, playerIndex: number) => void;
+  onClickDown?: (teamIndex: number, playerIndex: number) => void;
 };
 
-const TeamList = ({ teams, listTitle, setTeams }: Props) => {
+const TeamList = ({
+  teams,
+  listTitle,
+  setTeams,
+  isEdition = false,
+  onClickUp,
+  onClickDown,
+}: Props) => {
   const onChangeNameTeam =
     (index: number) => (event: ChangeEvent<HTMLTextAreaElement>) => {
       event.preventDefault();
@@ -29,14 +46,25 @@ const TeamList = ({ teams, listTitle, setTeams }: Props) => {
       setTeams(newTeamList);
     };
 
+  const onUp = (teamIndex: number, playerIndex: number) => () => {
+    onClickUp && onClickUp(teamIndex, playerIndex);
+  };
+
+  const onDown = (teamIndex: number, playerIndex: number) => () => {
+    onClickDown && onClickDown(teamIndex, playerIndex);
+  };
+
   return (
     <FlexBox
       flexDirection={{ xs: "column", md: "row" }}
       justifyContent='space-around'
       marginTop='16px'
     >
-      {teams.map((team, index) => (
-        <Box marginTop={{ xs: "24px", md: "0px" }}>
+      {teams.map((team, teamIndex) => (
+        <Box
+          marginTop={{ xs: "24px", md: "0px" }}
+          marginX={{ xs: "0px", md: "12px" }}
+        >
           <List
             dense={true}
             subheader={
@@ -45,17 +73,48 @@ const TeamList = ({ teams, listTitle, setTeams }: Props) => {
                   size='small'
                   variant='standard'
                   value={listTitle || team.name}
-                  onChange={onChangeNameTeam(index)}
+                  onChange={onChangeNameTeam(teamIndex)}
                 />
               </ListSubheader>
             }
           >
-            {team.players.map((player) => (
-              <ListItem>
+            {team.players.map((player, playerIndex) => (
+              <ListItem
+                sx={{
+                  border: isEdition
+                    ? `1px solid ${containerBorderColor}`
+                    : "none",
+                }}
+              >
                 <ListItemIcon>
                   <SportsHandball />
                 </ListItemIcon>
-                <ListItemText primary={player} />
+                <ListItemText
+                  primary={
+                    <FlexBox justifyContent='space-between' alignItems='center'>
+                      {player}
+                      {isEdition && (
+                        <FlexBox flexDirection='column' marginLeft='8px'>
+                          <WrapperArrow onClick={onUp(teamIndex, playerIndex)}>
+                            <IconButton size='small'>
+                              <ArrowDropUp />
+                            </IconButton>
+                          </WrapperArrow>
+                          <WrapperArrow
+                            marginTop='2px'
+                            onClick={onDown(teamIndex, playerIndex)}
+                          >
+                            <IconButton size='small'>
+                              <ArrowDropDown />
+                            </IconButton>
+                          </WrapperArrow>
+                        </FlexBox>
+                      )}
+                    </FlexBox>
+                  }
+                >
+                  <ArrowDropUp />
+                </ListItemText>
               </ListItem>
             ))}
           </List>
