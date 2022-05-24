@@ -197,8 +197,8 @@ const Home = () => {
 
         <FlexBoxCenter>
           <Box marginBottom='24px'>
-            <FlexBox>
-              <TextAreaWrapper marginRight='12px'>
+            <FlexBox flexDirection={{ xs: "column", md: "row" }}>
+              <TextAreaWrapper marginRight={{ xs: "0px", md: "12px" }}>
                 <FlexBox>
                   <Groups />
                   <Typography
@@ -212,12 +212,16 @@ const Home = () => {
                 <TextArea
                   id='male-players'
                   placeholder='Digite ou cole aqui a lista de jogadores masculinos...'
+                  cols={35}
                   value={values.malePlayers}
                   onChange={onChangeMales}
                 />
               </TextAreaWrapper>
 
-              <TextAreaWrapper marginLeft='12px'>
+              <TextAreaWrapper
+                marginLeft={{ xs: "0px", md: "12px" }}
+                marginTop={{ xs: "24px", md: "0px" }}
+              >
                 <FlexBox>
                   <Groups />
                   <Typography
@@ -231,21 +235,16 @@ const Home = () => {
                 <TextArea
                   id='female-players'
                   placeholder='Digite ou cole aqui a lista de jogadoras femininas...'
+                  cols={35}
                   value={values.femalePlayers}
                   onChange={onChangeFemales}
                 />
               </TextAreaWrapper>
             </FlexBox>
 
-            <Box
-              width={400}
-              display='flex'
-              flexDirection='column'
-              justifyContent='space-between'
-              marginTop='32px'
-            >
+            <FlexBoxCenter flexDirection='column' marginTop='32px'>
               <Box>
-                <Box display='flex' alignItems='center'>
+                <FlexBox alignItems='center'>
                   <Typography component='label' htmlFor='qtyPlayersByTeam'>
                     Quantidade de jogadores por time:
                   </Typography>
@@ -256,7 +255,7 @@ const Home = () => {
                     value={values.qtyPlayersByTeam}
                     onChange={onChangeQtyPlayersByTeam}
                   />
-                </Box>
+                </FlexBox>
                 <Box marginTop='24px'>
                   <Typography>{playersList.length} jogadores</Typography>
                   <Typography>
@@ -271,48 +270,80 @@ const Home = () => {
                 </Box>
               </Box>
 
-              <Box display='flex' marginTop='32px' alignSelf='baseline'>
-                <Box marginRight='8px'>
-                  <Button variant='contained' size='large' onClick={mountTeams}>
+              <FlexBoxCenter
+                flexDirection={{ xs: "column", md: "row" }}
+                marginTop='32px'
+                width='100%'
+              >
+                <Box marginRight={{ xs: "0", md: "8px" }}>
+                  <Button
+                    variant='contained'
+                    size='large'
+                    onClick={mountTeams}
+                    sx={{ width: 180 }}
+                  >
                     Montar times
                   </Button>
                 </Box>
-                <Button variant='outlined' size='large' onClick={resetForm}>
-                  Resetar
-                </Button>
-              </Box>
-            </Box>
+                <Box
+                  marginLeft={{ xs: "0", md: "8px" }}
+                  marginTop={{ xs: "8px", md: "0" }}
+                >
+                  <Button
+                    variant='outlined'
+                    size='large'
+                    onClick={resetForm}
+                    sx={{ width: 180 }}
+                  >
+                    Resetar
+                  </Button>
+                </Box>
+              </FlexBoxCenter>
+            </FlexBoxCenter>
           </Box>
         </FlexBoxCenter>
 
-        <TeamList teams={closedTeams} setTeams={setTeams} />
-        <TeamList
-          teams={remainingPlayers}
-          setTeams={setTeams}
-          listTitle='Sobra'
-        />
+        <FlexBoxCenter>
+          <TeamList teams={closedTeams} setTeams={setTeams} />
+          <TeamList
+            teams={remainingPlayers}
+            setTeams={setTeams}
+            listTitle='Sobra'
+          />
+        </FlexBoxCenter>
 
         {closedTeams.length > 0 && (
-          <Box marginTop='24px' width='100%' textAlign='center'>
-            <Button
-              variant='contained'
-              color='warning'
-              size='large'
-              onClick={cleanList}
-              sx={{ marginRight: "8px", width: 180 }}
+          <FlexBoxCenter
+            flexDirection={{ xs: "column", md: "row" }}
+            marginTop='24px'
+            width='100%'
+          >
+            <Box marginRight={{ xs: "0", md: "8px" }}>
+              <Button
+                variant='contained'
+                color='warning'
+                size='large'
+                onClick={cleanList}
+                sx={{ width: 180 }}
+              >
+                Formatar lista
+              </Button>
+            </Box>
+            <Box
+              marginLeft={{ xs: "0", md: "8px" }}
+              marginTop={{ xs: "8px", md: "0" }}
             >
-              Formatar lista
-            </Button>
-            <Button
-              variant='contained'
-              color='success'
-              size='large'
-              onClick={copyList}
-              sx={{ marginLeft: "8px", width: 180 }}
-            >
-              Copiar
-            </Button>
-          </Box>
+              <Button
+                variant='contained'
+                color='success'
+                size='large'
+                onClick={copyList}
+                sx={{ width: 180 }}
+              >
+                Copiar
+              </Button>
+            </Box>
+          </FlexBoxCenter>
         )}
       </WrapperContainer>
     </Container>

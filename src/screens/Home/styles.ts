@@ -3,7 +3,6 @@ import { Box, TextareaAutosize, TextField } from '@mui/material'
 import { containerBorderColor, containerBackgroundColor } from '../../colors'
 
 export const WrapperContainer = styled(Box)`
-    width: 100%;
     border: 1px solid;
     border-radius: 24px;
     padding: 32px;
@@ -14,7 +13,6 @@ export const WrapperContainer = styled(Box)`
 `
 
 export const TextArea = styled(TextareaAutosize)`
-    width: 300px;
     border-radius: 12px;
     border-color: ${containerBorderColor};
     padding: 16px;
